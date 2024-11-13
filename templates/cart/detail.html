@@ -1,0 +1,129 @@
+{% load static %}
+{% block title %}
+Your shopping cart
+{% endblock %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Shopping Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .cart {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+
+        .cart th, .cart td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .cart th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        .cart tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .num {
+            text-align: right;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        img {
+            max-width: 100px;  /* Adjust image size */
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your shopping cart</h1>
+    <table class="cart">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Remove</th>
+                <th>Unit price</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+            {% with product=item.product %}
+            <tr>
+                <td>
+                    <a href="{{ product.get_absolute_url }}">
+                        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'assets/web/img/no_image.png' %}{% endif %}">
+                    </a>
+                </td>
+                <td>{{ product.name }}</td>
+                <td>
+                  <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                    {{ item.update_quantity_form.quantity }}
+                    {{ item.update_quantity_form.override }}
+                    <input type="submit" value="Update">
+                    {% csrf_token %}
+                  </form>
+                </td>
+                <td>
+                  <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+                    <input type="submit" value="Remove">
+                    {% csrf_token %}
+                  </form>
+                </td>
+                <td class="num">${{ item.price }}</td>
+                <td class="num">${{ item.total_price }}</td>
+              </tr>
+            {% endwith %}
+          {% endfor %}
+            <tr class="total">
+                <td>Total Price</td>
+                <td colspan="4"></td>
+                <td class="num">${{ cart.get_total_price }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="text-right">
+        <a href="shop.html" class="button light">Continue shopping</a>
+        <a href="checkout.html" class="button">Checkout</a>
+    </p>
+</body>
+</html>
+{% endblock %}

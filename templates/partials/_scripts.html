@@ -1,0 +1,82 @@
+{% load static %}
+<script src="{% static 'assets/web/js/jquery-1.11.0.min.js' %}"></script>
+<script src="{% static 'assets/web/js/jquery-migrate-1.2.1.min.js' %}"></script>
+<script src="{% static 'assets/web/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/web/js/templatemo.js' %}"></script>
+<script src="{% static 'assets/web/js/custom.js' %}"></script>
+<script>
+    const items = [
+        // Products from shop.html
+        {% for i in shop %}
+    {
+        type: 'product',
+            name: "{{ i.name }}",
+                url: "{{ i.get_absolute_url }}",
+                    image: "{% if i.image %}{{ i.image.url }}{% else %}{% static 'assets/img/no_image.png' %}{% endif %}"
+    },
+    {% endfor %}
+    // Categories
+    {% for j in categories %}
+    {
+        type: 'category',
+            name: "{{ j.title }}",
+                url: "?categories={{ j.id }}", // Adjust URL as needed
+},
+    {% endfor %}
+    // Info
+    {% for i in info %}
+    {
+        type: 'info',
+            name: "{{ i.email }}", // Adjust as needed
+                url: "{{ i.get_absolute_url }}", // Adjust as needed
+},
+    {% endfor %}
+    // Additional Products from index.html
+    {% for i in product %}
+    { type: 'product', name: "{{ i.name }}", url: "index.html", image: "{% if i.image %}{{ i.image.url }}{% else %}{% static 'assets/img/no_image.png' %}{% endif %}" },
+    {% endfor %}
+];
+
+    document.getElementById('inputModalSearch').addEventListener('input', function () {
+        const query = this.value.toLowerCase();
+        console.log('Search Query:', query); // Debugging line
+        const results = items.filter(item => item.name.toLowerCase().includes(query));
+        console.log('Filtered Results:', results); // Debugging line
+        displayModalResults(results);
+    });
+
+    document.querySelector('.modal-content').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent form submission
+        const query = document.getElementById('inputModalSearch').value.toLowerCase();
+        console.log('Search Query on Submit:', query); // Debugging line
+        const results = items.filter(item => item.name.toLowerCase().includes(query));
+        console.log('Filtered Results on Submit:', results); // Debugging line
+        displayModalResults(results);
+    });
+
+    function displayModalResults(results) {
+        const resultsContainer = document.getElementById('searchResultsModal');
+        resultsContainer.innerHTML = ''; // Clear previous results
+
+        if (results.length > 0) {
+            results.forEach(result => {
+                const div = document.createElement('div');
+                if (result.type === 'product') {
+                    div.innerHTML = `<a href="${result.url}"><img src="${result.image}" alt="${result.name}" style="width: 50px; height: 50px;"/> ${result.name}</a>`;
+                } else if (result.type === 'category') {
+                    div.innerHTML = `<a href="${result.url}">${result.name}</a>`;
+                } else if (result.type === 'info') {
+                    div.innerHTML = `<a href="${result.url}">${result.name}</a>`;
+                }
+                resultsContainer.appendChild(div);
+            });
+        } else {
+            resultsContainer.textContent = 'No results found';
+        }
+    }
+
+    const modal = document.getElementById('templatemo_search');
+    modal.addEventListener('show.bs.modal', function () {
+        displayModalResults(items); // Show all items when modal opens
+    });
+</script>

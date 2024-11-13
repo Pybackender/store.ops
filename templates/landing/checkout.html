@@ -1,0 +1,438 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Ops</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+        }
+
+        .wrap {
+            background-color: #343a40;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        .billing-form {
+            margin: 20px 0;
+            padding: 30px;
+            background-color: #fff;
+            border: 2px solid #007bff; /* Blue border */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .billing-heading {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #007bff; /* Heading color */
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #343a40; /* Label color */
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da; /* Light gray border */
+            border-radius: 5px; /* Rounded corners */
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            border-color: #007bff; /* Change border color on focus */
+            outline: none; /* Remove outline */
+        }
+
+        .btn-primary {
+            background-color: #007bff; /* Button background color */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        .total-price {
+            font-weight: bold;
+            color: #28a745; /* Green color for total price */
+        }
+
+        .messagelist {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .messagelist .card {
+            background-color: #e7f3fe;
+            border-left: 8px solid #00ff11;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+			margin-left: 20px;
+        }
+
+        /* Radio and Checkbox styles */
+        .radio, .checkbox {
+            margin: 10px 0;
+        }
+
+        .radio input[type="radio"], .checkbox input[type="checkbox"] {
+            margin-right: 10px; /* Space between checkbox and label */
+        }
+	
+		.navbar {
+			padding: 10px;
+		}
+	
+		.navbar .text-light {
+			color: #fff !important;
+		}
+	
+		.reg {
+			margin: 10px 0;
+		}
+	
+		.reg a {
+			color: #007bff;
+			text-decoration: none;
+			margin-right: 15px;
+			transition: color 0.3s;
+		}
+	
+		.reg a:hover {
+			color: #0056b3;
+		}
+	
+		.breadcrumbs {
+			margin: 20px 0;
+			font-size: 1.2em;
+		}
+	
+		.cart-items {
+			margin: 20px 0;
+			padding: 20px;
+			background-color: #fff;
+			border: 2px solid #007bff; /* Blue border */
+			border-radius: 10px; /* Rounded corners */
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+		}
+	
+		.cart-items h3 {
+			border-bottom: 2px solid #007bff;
+			padding-bottom: 10px;
+			color: #007bff; /* Heading color */
+		}
+	
+		.cart-items table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 15px;
+		}
+	
+		.cart-items th, .cart-items td {
+			border: 1px solid #dee2e6; /* Light gray border */
+			padding: 10px;
+			text-align: left;
+		}
+	
+		.cart-items th {
+			background-color: #f8f9fa; /* Light gray background for header */
+			color: #403435; /* Dark text color */
+		}
+	
+		.cart-items tr:nth-child(even) {
+			background-color: #f2f2f2; /* Light background for even rows */
+		}
+	
+		.cart-items tr:hover {
+			background-color: #e9ecef; /* Highlight row on hover */
+		}
+	
+		.overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			display: none; /* Hide by default */
+		}
+	
+		.show-overlay {
+			display: block; /* Show overlay when needed */
+		}
+    </style>
+	
+    {% include '../partials/_style.html' %}
+</head>
+
+<body>
+
+    <div class="wrap">
+        <div class="container">
+            <div class="row">
+                <nav class="navbar navbar-expand-lg bg-dark navbar-light d-none d-lg-block" id="templatemo_nav_top">
+                    <div class="container text-light">
+                        {% for i in info %}
+                        <div class="w-100 d-flex justify-content-between">
+                            <div>
+                                <i class="fa fa-envelope mx-2"></i>
+                                <a class="navbar-sm-brand text-light text-decoration-none"
+                                    href="mailto:{{ i.email }}">{{ i.email }}</a>
+                                <i class="fa fa-phone mx-2"></i>
+                                <a class="navbar-sm-brand text-light text-decoration-none" href="tel:{{ i.phone }}">{{ i.phone }}</a>
+                            </div>
+                            <div>
+                                <a class="text-light" href="{{ i.youtube }}" target="_blank" rel="sponsored"><i
+                                        class="fab fa-youtube fa-lg fa-fw"></i></a>
+                                <a class="text-light" href="{{ i.instagram }}" target="_blank"><i
+                                        class="fab fa-instagram fa-sm fa-fw me-2"></i></a>
+                                <a class="text-light" href="{{ i.telegram }}" target="_blank"><i
+                                        class="fab fa-telegram fa-sm fa-fw me-2"></i></a>
+                                <a class="text-light" href="{{ i.linkedin }}" target="_blank"><i
+                                        class="fab fa-linkedin fa-sm fa-fw"></i></a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate mb-5 text-center">
+                <p class="breadcrumbs mb-0"><span class="mr-2"><a href="index.html">Home <i
+                            class="fa fa-chevron-right"></i></a></span> <span>Checkout <i
+                            class="fa fa-chevron-right"></i></span></p>
+                <h2 class="mb-0 bread">Checkout</h2>
+            </div>
+        </div>
+    </div>
+    <div class="cart-items">
+        <h3>Your Cart Items</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ item.price }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% block messages %}
+    {% if messages %}
+    <ul class="messagelist">
+        {% for message in messages %}
+        <div class="card">
+            <div class="message-text-container">
+                <p class="message-text">Success shopping</p>
+                <p class="sub-text">Everything seems great</p>
+            </div>
+        </div>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endblock messages %}
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-10 ftco-animate">
+                    <form action="{% url 'checkout' %}" method="post" class="billing-form">
+                        {% csrf_token %}
+                        <h3 class="mb-4 billing-heading">Billing Details</h3>
+                        <div class="row align-items-end">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.first_name.label_tag }}
+                                    {{ form.first_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.last_name.label_tag }}
+                                    {{ form.last_name }}
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    {{ form.country.label_tag }}
+                                    {{ form.country }}
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.street_address.label_tag }}
+                                    {{ form.street_address }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.apartment.label_tag }}
+                                    {{ form.apartment }}
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.city.label_tag }}
+                                    {{ form.city }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.postcode.label_tag }}
+                                    {{ form.postcode }}
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.phone.label_tag }}
+                                    {{ form.phone }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.email.label_tag }}
+                                    {{ form.email }}
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <div class="form-group mt-4">
+                                    {{ form.different_address }} {{ form.different_address.label }}
+                                </div>
+                            </div>
+                            {% for item in cart_items %}
+                            <input type="hidden" name="product_names" value="{{ item.product.name }}">
+                            <input type="hidden" name="quantities" value="{{ item.quantity }}">
+                            {% endfor %}
+                            <input type="hidden" name="total_price" value="{{ total_price }}">
+                        </div>
+                        <p><button type="submit" class="btn btn-primary py-3 px-4">Place an order</button></p>
+                        <a href="product">Continue shopping</a>
+                    </form>
+
+                    <div class="row mt-5 pt-3 d-flex">
+                        <div class="col-md-6 d-flex">
+                            <div class="cart-detail cart-total p-3 p-md-4">
+                                <h3 class="billing-heading mb-4">Cart Total</h3>
+                                <p class="d-flex">
+                                    <span>Subtotal</span>
+                                    <span>${{ cart.get_total_price }}</span>
+                                </p>
+                                <p class="d-flex">
+                                    <span>Delivery</span>
+                                    <span>${{ delivery|floatformat:2 }}</span>
+                                </p>
+                                <p class="d-flex">
+                                    <span>Discount</span>
+                                    <span>${{ discount|floatformat:2 }}</span>
+                                </p>
+                                <hr>
+                                <p class="d-flex total-price">
+                                    <span>Total</span>
+                                    <span>${{ total_price|floatformat:2 }}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="cart-detail p-3 p-md-4">
+                                <h3 class="billing-heading mb-4">Payment Method</h3>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="radio">
+                                            <label><input type="radio" name="optradio" class="mr-2"> Direct Bank
+                                                Transfer</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="radio">
+                                            <label><input type="radio" name="optradio" class="mr-2"> Check
+                                                Payment</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="radio">
+                                            <label><input type="radio" name="optradio" class="mr-2"> Paypal</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="" class="mr-2"> I have read and accept
+                                                the terms and conditions</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p><a href="#" class="btn btn-primary py-3 px-4">Place an order</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- .col-md-8 -->
+            </div>
+        </div>
+    </section>
+
+  <!-- Start Footer -->
+  {% include '../shared/info.html' %}
+  <!-- End Footer -->
+
+  <!-- Start Script -->
+  {% include '../partials/_scripts.html'%}
+  <!-- End Script -->
+
+</body>
+
+</html>
